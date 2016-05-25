@@ -58,17 +58,17 @@
 
 
 
-<meta name="description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta name="description" content="相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于Nginx搭建Python WSGI应用">
 <meta property="og:url" content="http://heaven1881.github.io/2016/05/25/nginx-python/index.html">
 <meta property="og:site_name" content="Winton的学习笔记">
-<meta property="og:description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta property="og:description" content="相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
 <meta property="og:image" content="http://heaven1881.github.io/uploads/py-nginx.png">
-<meta property="og:updated_time" content="2016-05-25T05:27:11.000Z">
+<meta property="og:updated_time" content="2016-05-25T05:30:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Nginx搭建Python WSGI应用">
-<meta name="twitter:description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta name="twitter:description" content="相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
 <meta name="twitter:image" content="http://heaven1881.github.io/uploads/py-nginx.png">
 
 
@@ -304,7 +304,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。</p>
+        <p>相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。</p>
 <a id="more"></a>
 <h1 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h1><p>要完成WSGI应用的部署，需要对相关的知识有一定的了解。在这里我们需要了解的除了Nginx以外还有WSGI，uWSGI。总的来说，这三者的关系可以参考下图。如果你已经足够了解，则可以直接跳过这部分。</p>
 <p><img src="/uploads/py-nginx.png" alt=""></p>
@@ -559,7 +559,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关知识"><span class="nav-number">2.</span> <span class="nav-text">相关知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境准备"><span class="nav-number">3.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建WSGI应用"><span class="nav-number">4.</span> <span class="nav-text">创建WSGI应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Nginx服务器"><span class="nav-number">5.</span> <span class="nav-text">配置Nginx服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置uWSGI服务器"><span class="nav-number">6.</span> <span class="nav-text">配置uWSGI服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#相关知识"><span class="nav-number">1.</span> <span class="nav-text">相关知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境准备"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建WSGI应用"><span class="nav-number">3.</span> <span class="nav-text">创建WSGI应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Nginx服务器"><span class="nav-number">4.</span> <span class="nav-text">配置Nginx服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置uWSGI服务器"><span class="nav-number">5.</span> <span class="nav-text">配置uWSGI服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
         </section>
