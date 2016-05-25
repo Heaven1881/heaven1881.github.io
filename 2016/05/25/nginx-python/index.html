@@ -1,0 +1,734 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,python,nginx,wsgi,uwsgi," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Nginx搭建Python WSGI应用">
+<meta property="og:url" content="http://heaven1881.github.io/2016/05/25/nginx-python/index.html">
+<meta property="og:site_name" content="Winton的学习笔记">
+<meta property="og:description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta property="og:image" content="http://heaven1881.github.io/uploads/py-nginx.png">
+<meta property="og:updated_time" content="2016-05-25T05:27:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Nginx搭建Python WSGI应用">
+<meta name="twitter:description" content="前言相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。">
+<meta name="twitter:image" content="http://heaven1881.github.io/uploads/py-nginx.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6286821784058594000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 基于Nginx搭建Python WSGI应用 | Winton的学习笔记 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0ea93ab861d7093ed7fb2b88880c865b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Winton的学习笔记</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '19m7UExg459jNyhvzYxS','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于Nginx搭建Python WSGI应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-25T13:27:11+08:00" content="2016-05-25">
+              2016-05-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/25/nginx-python/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/nginx-python/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>相比于Apache，Nginx是一个轻量级高性能的服务器和反向代理，其特点是资源占用少，并发能力高。下面我就介绍一下如何在Linux下基于Nginx搭建Python wsgi应用。</p>
+<a id="more"></a>
+<h1 id="相关知识"><a href="#相关知识" class="headerlink" title="相关知识"></a>相关知识</h1><p>要完成WSGI应用的部署，需要对相关的知识有一定的了解。在这里我们需要了解的除了Nginx以外还有WSGI，uWSGI。总的来说，这三者的关系可以参考下图。如果你已经足够了解，则可以直接跳过这部分。</p>
+<p><img src="/uploads/py-nginx.png" alt=""></p>
+<p><strong>Nginx 服务器</strong><br>Nginx是一个反向代理服务器(Reverse Proxy Server)。反向代理是指以代理服务器来接受Internet上的连接请求，然后将请求转发给内部网络上的服务器；并将从服务器上得到的结果返回给Internet上请求连接的客户端，此时代理服务器对外就表现为一个服务器，同时因为这个代理服务器的作用正好和正向代理相反，因此就有了反向代理的名字。更多关于反向代理的信息，可以参考：<a href="http://blog.csdn.net/keyeagle/article/details/6723408/" target="_blank" rel="external">反向代理服务器的工作原理</a>。</p>
+<p><strong>uWSGI 服务器</strong><br>uWSGI也是一个服务器，它和php-cgi类似，提供的就是执行对应脚本的功能，php-cgi提供php脚本的功能，uWSGI提供执行python脚本的功能，uWSGI支持多种协议，不过我们最关心的是其支持的uwsgi协议。</p>
+<p><strong>WSGI 应用</strong><br>PythonWeb服务器网关接口（Python Web Server Gateway Interface)，缩写是WSGI。WSGI是Python应用程序或框架和Web服务器之间的一种接口。我们把运行在uWSGI服务上的Python程序称为WSGI应用。</p>
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>在继续安装之前，你需要先确保自己的服务器上安装有<code>Python</code>以及<code>pip</code>，其对应的安装方法在网上可以容易的找到。我使用的操作系统是<code>CentOS</code>使用<code>yum</code>管理和安装软件。其他平台的安装方法也大同小异，如果操作系统是<code>Debian</code>系列的，例如<code>Ubuntu</code>，则理论上只要将下面命令的<code>yum</code>改变为<code>apt-get</code>即可。</p>
+<p><strong>下载并安装uWSGI</strong><br>使用<code>pip</code>安装uWSGI</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip install uwsgi</span><br></pre></td></tr></table></figure>
+<p><strong>下载并安装Nginx</strong><br>在不同Linux平台下安装的方法各不相同，我这里使用的是<code>CentOS</code>，使用的命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo yum install nginx</span><br></pre></td></tr></table></figure>
+<h1 id="创建WSGI应用"><a href="#创建WSGI应用" class="headerlink" title="创建WSGI应用"></a>创建WSGI应用</h1><p>我们现在要创建运行于uWSGI服务器的WSGI应用。我们先使用测试用的WSGI Application。将下列内容保存在名字为<code>wsgi.py</code>的文件里。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">application</span><span class="params">(env, start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">'200 OK'</span>, [(<span class="string">'Content-Type'</span>, <span class="string">'text/html'</span>)])</span><br><span class="line">    <span class="keyword">return</span> [<span class="string">"Hello!"</span>]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> 文件名<code>wsgi.py</code>不是必须的，理论上你可以使用任意文件名。</p>
+</blockquote>
+<p>这是一个最简单的WSGI程序样例，通过观察代码我们可以知道。应用返回<code>Hello</code>字符串以及状态码<code>200</code>。关于WSGI的相关接口定义可以参照<a href="http://wsgi.tutorial.codepoint.net/intro" target="_blank" rel="external">WSGI Tutorial</a>。</p>
+<p>我们的WSGI应用需要借助uWSGI服务器运行，使用如下命令运行在uWSGI服务器上运行我们的<code>wsgi.py</code>程序。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ uwsgi --socket 127.0.0.1:9090 --protocol=http -w wsgi</span><br></pre></td></tr></table></figure>
+<p>这条命令会在前台直接运行uWSGI服务器，服务器监听来自<code>127.0.0.1:9090</code>的HTTP内容，我们通过<code>-w wsgi</code>指定使用<code>wsgi.py</code>处理HTTP请求。</p>
+<p><strong>注意</strong>：当uWSGI和Nginx一起运行时，需要移除选项<code>--protocol=http</code>，否则Nginx和uWSGI之间无法进行通信。原因是Nginx和uWSGI之间的通信并不依赖HTTP协议，而是uwsgi协议。</p>
+<blockquote>
+<p>对于在前台运行的uWSGI服务器，你可以使用<code>Ctrl+C</code>来停止其运行</p>
+</blockquote>
+<p>选项<code>--socket 127.0.0.1:9090</code>代表uWSGI监听<code>9090</code>端口，但是只接收IP地址为127.0.0.1(也就是本地IP)的请求，这是处于安全考虑的，uWSGI并不直接对外部提供服务，由我们的反向代理服务器Nginx负责和uWSGI通信。</p>
+<p>运行这条命令以后，通过浏览器访问<code>http://loaclhost:9090</code>应该能看到对应的页面。</p>
+<blockquote>
+<p>如果你不是在本地进行配置，则需要将<code>--socket</code>选项的内容指定为<code>0.0.0.0:9090</code>，表示接受来自所有ip的请求。然后在浏览器访问<code>http://your_ip:9090</code>。</p>
+</blockquote>
+<p>uWSGI服务器运行以后，如果能够在浏览器里看到对应的页面，则代表我们的WSGI应用以及uWSGi服务器没有问题，但是目前和Nginx还没有任何关系，接下来我们需要进行Nginx相关的配置。同时，目前uWSGI的运行方式只是暂时的，要真正让uWSGI和Nginx一起稳定的工作，我们还需要对uWSGI进行更多的配置，我们会在后面的章节继续讨论。</p>
+<h1 id="配置Nginx服务器"><a href="#配置Nginx服务器" class="headerlink" title="配置Nginx服务器"></a>配置Nginx服务器</h1><p>如果uWSGI服务器已经正常运行，我们还需要配置Nginx服务器，以便两个服务器之间可以正常通信。</p>
+<p>打开Nginx配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo vim /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>/etc/nginx/nginx.conf</code>是大多数Nginx配置文件的默认路径，你也可以使用<code>sudo nginx -t</code>或者<code>sudo nginx -V</code>来查看自己机器上配置文件的配置。</p>
+</blockquote>
+<p>下面给出一个完成的<code>nginx.conf</code>配置文件参考，你也可以将这个文件直接替换<code>nginx.conf</code>，但是推荐只将将自己需要的部分填入自己对应的配置文件的位置。关键的部分我会以注释给出。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">worker_processes</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">sendfile</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">gzip</span>              <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">0</span>;</span><br><span class="line">    <span class="attribute">gzip_proxied</span>      any;</span><br><span class="line">    <span class="attribute">gzip_min_length</span>   <span class="number">500</span>;</span><br><span class="line">    <span class="attribute">gzip_disable</span>      <span class="string">"MSIE [1-6]\."</span>;</span><br><span class="line">    <span class="attribute">gzip_types</span>        text/plain text/xml text/css</span><br><span class="line">                      text/comma-separated-values</span><br><span class="line">                      text/javascript</span><br><span class="line">                      application/x-javascript</span><br><span class="line">                      application/atom+xml;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 之前配置的uWSGI服务器的相关信息</span></span><br><span class="line">    <span class="comment"># 这里Nginx允许配置多个uWSGI服务器，用于负载均衡</span></span><br><span class="line">    <span class="attribute">upstream</span> uwsgicluster &#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">127.0.0.1:9090</span>;</span><br><span class="line">        <span class="comment"># server 127.0.0.1:9091;</span></span><br><span class="line">        <span class="comment"># ..</span></span><br><span class="line">        <span class="comment"># .</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Nginx的服务器配置</span></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 端口</span></span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置静态文件目录</span></span><br><span class="line">        <span class="comment"># 对于静态文件，Nginx直接将文件内容返回 </span></span><br><span class="line">        <span class="attribute">location</span><span class="regexp"> ^~</span> /static/  &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Example:</span></span><br><span class="line">            <span class="comment"># root /full/path/to/application/static/file/dir;</span></span><br><span class="line">            <span class="attribute">root</span> /app/static/;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 作为反向代理连接到WSGI应用</span></span><br><span class="line">        <span class="comment"># 必需</span></span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line"></span><br><span class="line">            <span class="attribute">include</span>            uwsgi_params;</span><br><span class="line">            <span class="comment"># 这里的uwsgicluster来自刚才指定的upstream配置，这样可以提供负载均衡的功能</span></span><br><span class="line">            <span class="comment"># 你也可以使用如下注释的代码直接指定地址</span></span><br><span class="line">            <span class="comment"># uwsgi_pass    127.0.0.1:9090;</span></span><br><span class="line">            <span class="attribute">uwsgi_pass</span>         uwsgicluster;</span><br><span class="line"></span><br><span class="line">            <span class="attribute">proxy_redirect</span>     <span class="literal">off</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   Host <span class="variable">$host</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">            <span class="attribute">proxy_set_header</span>   X-Forwarded-Host <span class="variable">$server_name</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用这个配置，Nginx会将所有以<code>/static/</code>开头的访问转到对应的静态文件，将其他所有的请求转发到我们的WSGI应用。</p>
+<p>到这里就基本上完成了Nginx的配置，重启Nginx让配置文件生效。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo nginx <span class="_">-s</span> reload</span><br></pre></td></tr></table></figure>
+<p>如果上面的命令在你的机器上无效，可以试一试下面的命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo service nginx stop</span><br><span class="line">$ sudo service nginx start</span><br></pre></td></tr></table></figure>
+<h1 id="配置uWSGI服务器"><a href="#配置uWSGI服务器" class="headerlink" title="配置uWSGI服务器"></a>配置uWSGI服务器</h1><p>之前我们已经介绍了一些运行uWSGI服务器的方法了，但是每次启动服务都需要手动将参数输入命令行是十分麻烦的，而且不方便我们对配置进行调整。因此我们需要将uWSGI的配置写入文件中。</p>
+<p>uWSGI可以支持<code>.ini</code>和<code>.json</code>的配置文件，这两个文件的配制方法大同小异。这里我使用的<code>.ini</code>，下面直接给出我的配置文件代码。更多的配置选项说明，请参考<a href="http://www.cnblogs.com/zhouej/archive/2012/03/25/2379646.html" target="_blank" rel="external">uWSGI配置文档翻译</a></p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># socket = addr:port</span></span><br><span class="line"><span class="attr">socket</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9090</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># WSGI Application 所在的目录</span></span><br><span class="line"><span class="attr">chdir</span>  = /home/winton/www/py-nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否使用master进程对worker进行管理</span></span><br><span class="line"><span class="attr">master</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># woker的数量</span></span><br><span class="line"><span class="attr">processes</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># WSGI应用的文件</span></span><br><span class="line"><span class="attr">wsgi-file</span> = wsgi.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使进程在后台运行，并将日志打到指定的日志文件</span></span><br><span class="line"><span class="attr">daemonize</span> = /tmp/uwsgi/uwsgi_deamonize.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将pid写到指定的pidfile文件中</span></span><br><span class="line"><span class="attr">pidfile</span> = /tmp/uwsgi/uwsgi_pid.pid</span><br></pre></td></tr></table></figure>
+<p>配置文件写好之后，我们可以直接使用如下命令运行我们的uWSGI服务器。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ uwsgi --py-autoreload=1 --ini wsgi.ini</span><br></pre></td></tr></table></figure>
+<p>这个命令会直接在后台运行我们的WSGI应用，其中<code>--py-autoreload=1</code>会检测<code>.py</code>文件的改动并重新载入对应的文件。在开发时是很有用的一个选项。</p>
+<p>一直到这一步，我们的基本上完成了全部的工作，接下来就是继续完善我们的WSGI应用了。你可以参考<a href="http://wsgi.tutorial.codepoint.net/intro" target="_blank" rel="external">WSGI Tutorial</a>来了解如何调用WSGI接口来处理<code>GET</code>和<code>POST</code>请求。也可参考我们<a href="https://github.com/Heaven1881/py-nginx" target="_blank" rel="external">github仓库</a>，这里有相关的所有代码。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-deploy-python-wsgi-applications-using-uwsgi-web-server-with-nginx" target="_blank" rel="external">How to Deploy Python WSGI Applications Using uWSGI Web Server with Nginx</a><br><a href="http://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html" target="_blank" rel="external">Quickstart for Python/WSGI applications</a><br><a href="http://wsgi.tutorial.codepoint.net/intro" target="_blank" rel="external">WSGI Tutorial</a><br><a href="http://www.cnblogs.com/zhouej/archive/2012/03/25/2379646.html" target="_blank" rel="external">uWSGI配置文档翻译</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/python/" rel="tag">#python</a>
+          
+            <a href="/tags/nginx/" rel="tag">#nginx</a>
+          
+            <a href="/tags/wsgi/" rel="tag">#wsgi</a>
+          
+            <a href="/tags/uwsgi/" rel="tag">#uwsgi</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/21/cmd-xargs/" rel="next" title="xargs命令学习笔记">
+                <i class="fa fa-chevron-left"></i> xargs命令学习笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/25/nginx-python/"
+     data-title="基于Nginx搭建Python WSGI应用"
+     data-content=""
+     data-url="http://heaven1881.github.io/2016/05/25/nginx-python/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/25/nginx-python/"
+           data-title="基于Nginx搭建Python WSGI应用" data-url="http://heaven1881.github.io/2016/05/25/nginx-python/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Winton Luo" />
+          <p class="site-author-name" itemprop="name">Winton Luo</p>
+          <p class="site-description motion-element" itemprop="description">心若止水功自成</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Heaven1881" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:heaven1881@163.com" target="_blank" title="Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                  Mail
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关知识"><span class="nav-number">2.</span> <span class="nav-text">相关知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境准备"><span class="nav-number">3.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建WSGI应用"><span class="nav-number">4.</span> <span class="nav-text">创建WSGI应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Nginx服务器"><span class="nav-number">5.</span> <span class="nav-text">配置Nginx服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置uWSGI服务器"><span class="nav-number">6.</span> <span class="nav-text">配置uWSGI服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016/5/20 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Winton Luo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"heaven1881"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
