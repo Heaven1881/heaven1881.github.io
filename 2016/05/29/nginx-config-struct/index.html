@@ -1,0 +1,829 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nginx,配置," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在本文，我们将讨论Nginx的基础配置结构，来让大家更好的理解Nginx的逻辑。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 Nginx 配置">
+<meta property="og:url" content="http://heaven1881.github.io/2016/05/29/nginx-config-struct/index.html">
+<meta property="og:site_name" content="Winton的学习笔记">
+<meta property="og:description" content="在本文，我们将讨论Nginx的基础配置结构，来让大家更好的理解Nginx的逻辑。">
+<meta property="og:updated_time" content="2016-05-29T05:23:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解 Nginx 配置">
+<meta name="twitter:description" content="在本文，我们将讨论Nginx的基础配置结构，来让大家更好的理解Nginx的逻辑。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6286821784058594000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 深入理解 Nginx 配置 | Winton的学习笔记 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0ea93ab861d7093ed7fb2b88880c865b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Winton的学习笔记</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '19m7UExg459jNyhvzYxS','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                深入理解 Nginx 配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-29T13:23:22+08:00" content="2016-05-29">
+              2016-05-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">Nginx</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/29/nginx-config-struct/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/29/nginx-config-struct/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在本文，我们将讨论Nginx的基础配置结构，来让大家更好的理解Nginx的逻辑。</p>
+<a id="more"></a>
+<blockquote>
+<p>原文链接 <a href="https://n0where.net/understanding-the-nginx/" target="_blank" rel="external">Understanding the Nginx</a><br>本文主要结合这篇文章的内容和我自己的一些理解</p>
+</blockquote>
+<p>Nginx是一个高性能的Web服务器。除了可以很好的处理Web静态内容，Nginx在高并发的环境下表现也十分突出。Nginx是世界上最受青睐的服务器之一，它不仅是普通的Web服务器，还可以是邮件服务器以及反向代理服务器。</p>
+<p>在本文，我们将讨论Nginx的基础配置结构，来让大家更好的理解Nginx的逻辑。</p>
+<p>Nginx在逻辑上将组织为一个个包含嵌套和并列关系的结构，在这里我们把这样一个个的结构统称为域(Context)。对于Nginx来说每次处理客户端的请求就等价于在配置中选择能够匹配请求的域，而Nginx进行选择的过程就是我们在这篇文章需要讨论的内容。</p>
+<h1 id="主要域-Context"><a href="#主要域-Context" class="headerlink" title="主要域(Context)"></a>主要域(Context)</h1><p>如果你查看 Nginx 的配置文件(例如:<code>/etx/nginx/nginx.conf</code>)，你会发现每个域都是由<code>{</code>和<code>}</code>包裹起来的数据集，它们以类似于树的结构进行组织。域的内部则是由多条指令组成。一个域可以被另一个域包含，在这种情况下，上一级域指令会被传递到下一级域。指令是对Nginx进行配置的主要方法。在本文，我们会涉及到一些常用的指令，你也可以查阅<a href="http://nginx.org/en/docs/dirindex.html" target="_blank" rel="external">Alphabetical index of directives</a>了解更详细的信息。</p>
+<h2 id="Main-域"><a href="#Main-域" class="headerlink" title="Main 域"></a>Main 域</h2><p>Main域也就是我们的全局环境，所有域的最外面就是Main域，在Nginx配置中，Main域的位置就像下面这样</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"># 这里就是main域，处于所有域的外面</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">context &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>任何出现在main域的指令都被称作“全局指令”。需要注意的是如果你的Nginx是根据不同模块进行配置的，例如一般我们会将每个server的配置分开写到<code>conf.d/*.conf</code>或者<code>server/*.conf</code>，在这些文件里，可能会包含一些看起来处于所有域外的指令，但是实际上这些指令并不是全局指令，它们会在其它文件中被引入到另一个域中。</p>
+<p>main域可以用来存放一些设计到全局的，基础的指令。全局的指令的值会为子域提供默认值，子域也可以根据需要对相应的指令进行重载。</p>
+<h2 id="Event-域"><a href="#Event-域" class="headerlink" title="Event 域"></a>Event 域</h2><p>Event域是Main域的一个子域，用于配置Nginx处理连接的方式，在Nginx配置文件中只能有一个Event域。Nginx使用基于事件的连接处理模型，一般在Event域中的指令都是用来选择worker处理连接的相关方法，或者用来修改对应方法的实现。</p>
+<p>Event域还可以用来配置其他的一些信息，例如worker同时处理的连接数，以及是否让每个worker一次只处理一个连接，是否让worker轮流处理连接。</p>
+<h2 id="Http-域"><a href="#Http-域" class="headerlink" title="Http 域"></a>Http 域</h2><p>如果我们希望让Nginx作为一个Web服务器或者反向代理服务器，Http域就会被用来保存各种相关的配置，Http域里保存所有用来处理HTTP/HTTPS请求的指令。</p>
+<p>和Event域一样，Http域必须直接是Main域的子域。</p>
+<p>大部分更具体的配置被保存在Http域下面的Server域，在Http域里主要设置每个Server域的默认值，例如：相关的日志文件的保存位置(<code>access_log</code>，<code>error_log</code>)，文件的异步I/O操作(<code>aio</code>, <code>sendfile</code>, <code>directio</code>)，服务器不同状态码对应的页面(<code>error_page</code>)，压缩选项(<code>gzip</code>和<code>gzip_disable</code>)。</p>
+<h2 id="Server-域"><a href="#Server-域" class="headerlink" title="Server 域"></a>Server 域</h2><p>Server域处于Http域内部，Nginx允许同时定义多个Server域，他们在Nginx配置文件中的大概就像下面的格式。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"># main context</span><br><span class="line">http: &#123;</span><br><span class="line">    # http context</span><br><span class="line">    server &#123;</span><br><span class="line">        # first server context</span><br><span class="line">    &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        # second server context</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个Server域代表了一个可以处理客户端请求的虚拟服务器。因为Nginx可以同时指定多个虚拟服务器，因此Nginx需要根据用户的请求来决定让哪一个Server进行处理。</p>
+<p>Nginx通过下面两个字段来判断一个Server是否应该被用来处理某一个客户端请求。</p>
+<ul>
+<li><code>listen</code>：IP和端口，Nginx会优先选择这一字段匹配的Server</li>
+<li><code>server_name</code>：域名。如果多个Server有相同的<code>listen</code>值，Nginx则进而匹配这一字段。</li>
+</ul>
+<p><strong>Nginx 如何选择Server来处理请求</strong><br>首先，Nginx检查客户端的IP地址和访问的端口号，从Server列表中根据<code>listen</code>字段筛选出匹配的Server。</p>
+<p><code>listen</code>记录了每个Server选择监听的ip地址和端口，如果一个Server没有指定<code>listen</code>，则会取默认值<code>0.0.0.0:80</code>(如果Nginx不是以<code>root</code>身份运行，则默认值为<code>0.0.0.0:8080</code>)</p>
+<p><code>listen</code>字段可以设置为如下格式</p>
+<ul>
+<li>IP和端口的组合</li>
+<li>只有IP，这种情况下端口会取默认值<code>80</code></li>
+<li>只有端口，这种情况下IP取默认值<code>0.0.0.0</code></li>
+<li>UNIX socket的路径</li>
+</ul>
+<p>Nginx检查<code>listen</code>字段的步骤和规则如下</p>
+<ol>
+<li>将“不完整”的<code>listen</code>转换为完整的<code>listen</code>值<ul>
+<li>如果一个Server没有指定<code>listen</code>，则<code>listen</code>的值取<code>0.0.0.0:80</code></li>
+<li><code>111.111.111.111</code>将被转换为<code>111.111.111.111：80</code></li>
+<li><code>8000</code>将转换为<code>0.0.0.0:8000</code></li>
+</ul>
+</li>
+<li>从所有备选Server中根据<code>listen</code>字段选出最匹配的Server，如果有多个最匹配的Server，则将其都选入待选列表中。需要注意的是，我们这里说的是“最匹配”，也就是说，在端口都相同的情况下，如果有Server监听的IP刚好等于客户端的IP，那么其余所有监听<code>0.0.0.0</code>的Server都不会被加入待选列表。</li>
+<li>经过上面的筛选，如果只剩余一个Server，则Nginx会直接忽略<code>server_name</code>选择这一个Server处理客户端请求，如果有多个Server，则Nginx会继续比较<code>server_name</code>字段</li>
+</ol>
+<p>在下面的例子中，假设客户端的IP为<code>192.168。1.10</code>，服务器的域名为<code>example.com</code>，客户端访问域名<code>example.com</code>，则最后只有第一个服务器被选择来处理请求，因为<code>listen</code>字段一旦匹配则不再考虑<code>server_name</code>字段。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 192.168.1.10;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果有多个Server的<code>listen</code>字段一样，那么Nginx则会开始比较<code>server_name</code>字段。</p>
+<blockquote>
+<p>Nginx通过检查客户端发送的HTTP请求的“Host”头部来确定客户端访问的域名，这个字段会用来和<code>server_name</code>比较。</p>
+</blockquote>
+<p>Nginx根据以下顺序来选择匹配的Server：</p>
+<ul>
+<li>寻找精确匹配的<code>server_name</code>，如果存在，则选择第一个匹配的Server</li>
+<li>寻找使用前置通配符<code>*</code>的<code>server_name</code>，如果能够匹配多个Server，则选择最长匹配</li>
+<li>寻找使用后置通配符<code>*</code>的<code>server_name</code>，如果能够匹配多个Server，则选择最长匹配</li>
+<li>寻找使用正则表达式匹配的<code>server_name</code>，如果有多个Server匹配，选择第一个匹配的Server</li>
+<li>如果经过上面的流程，没有Server复合要求，则Nginx会选择默认的Server</li>
+</ul>
+<blockquote>
+<p>如果需要在<code>server_name</code>中使用正则表达式，则需要在表达式之前使用<code>~</code>声明。</p>
+</blockquote>
+<p>Nginx通过<code>default_server</code>来指定默认的Server，否则使用第一个Server作为默认Server。需要注意的是，每一个IP和端口的组合只能指定一个<code>default_server</code>，只有<code>listen</code>字段符合要求才有可能会选为默认Server。</p>
+<p>在下面的例子中，如果请求的域名是“cyberpunk.example.com”，则第二个Server会被选中处理请求。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.example.com;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name cyberpunk.example.com;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果Nginx没有找到精确匹配的<code>server_name</code>，则会寻找使用前置通配符的<code>server_name</code>，如果有多个匹配，则选择最长匹配的Server。在下面的例子中，如果访问的域名是<code>www.example.com</code>，则第二个Server会被选中。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name www.example.*;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.example.org;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.org;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有找到匹配的<code>server_name</code>，Nginx会检查后置通配符的匹配情况，同样也会选择最长匹配。下面的例子中，访问的域名为<code>www.example.com</code>，第三个Server会被选择。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name host1.example.com;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name www.example.*;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有找到匹配的后置通配符<code>server_name</code>，下一步Nginx会寻找正则表达式。Nginx会选择第一个匹配的Server。在下面的例子中，客户端访问的域名为<code>www.example.com</code>，第二个Server会被选中。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name example.com;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name ~^(www|host1).*\.example\.com$;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name ~^(subdomain|set|www|host1).*\.example\.com$;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果上面的步骤无法选择出对应的Server，那么客户端的请求将会交由匹配<code>listen</code>字段的默认Server处理。</p>
+<h2 id="Location-域"><a href="#Location-域" class="headerlink" title="Location 域"></a>Location 域</h2><p>一旦Nginx完成Server域的选择，接下来的工作就是选择对应Location域。每个Server可以定义多个Location域，每个Location对应一种类型的客户端请求，每个Location的格式如下</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location (可选修饰符) (匹配字符串) &#123;</span><br><span class="line">    . . . </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配字符串用于和客户端请求的URI作比较，可选修饰符会影响Nginx匹配URI的方式，可选修饰符的类型如下：</p>
+<ul>
+<li>无可选修饰符：在这种情况下，匹配字符串会被用于前缀匹配，即从URI的头部开始匹配</li>
+<li><code>=</code>：精确匹配</li>
+<li><code>~</code>：大小写敏感的正则表达式匹配</li>
+<li><code>~*</code>：大小写不敏感的正则表达式匹配</li>
+<li><code>^~</code>：如果匹配字符串是最佳的非正则表达式匹配，则不再进行其他正则表达式的匹配判断</li>
+</ul>
+<blockquote>
+<p>URI的例子：对于访问<code>http://www.example.com/blog</code>，其URI为<code>/blog</code></p>
+</blockquote>
+<p>Location域处于Server域之下，与Server域不同的是，Location域允许相互嵌套，因此，我们可以借助这一特性去逐步拆解客户端访问的URI，提供更为清晰的管理方式。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># main context</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="comment"># server context</span></span><br><span class="line">    <span class="attribute">location</span> /match/criteria &#123;</span><br><span class="line">        <span class="comment"># first location context</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">location</span> /other/criteria &#123;</span><br><span class="line">        <span class="comment"># second location context</span></span><br><span class="line">        <span class="attribute">location</span> nested_match &#123;</span><br><span class="line">            <span class="comment"># first nested location</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> other_nested &#123;</span><br><span class="line">            <span class="comment"># second nested location</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Location的例子</strong><br>Location默认的匹配是前缀匹配，下面的Location可以匹配<code>/site</code>，<code>/site/page/index.html</code>和<code>/site/index.html</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location /site &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用<code>=</code>，可以修改Location的匹配方式为精确匹配，下面的例子只能匹配<code>/page</code>，不能匹配<code>/page/index.html</code>。不过这里需要注意的是，如果我们使用<code>index index.html</code>的指令来指定默认页面，则进入这个Loaction后，Nginx会先将URI补充为<code>/page/index.html</code>，然后会通过一个重定向跳转到另外一个可以处理这个URI的Location。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location = /page &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的Location可以匹配<code>a.png</code>，但是不能匹配<code>a.PNG</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location ~ \.(jpe?g|png|gif|ico)$ &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的Location可以匹配<code>a.png</code>和<code>a.PNG</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location ~* \.(jpe?g|png|gif|ico)$ &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的Location如果被选为最佳的非正则表达式匹配，则其会阻止正则表达匹配的进行。它也可以匹配请求<code>/customes/ninjia.html</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location ^~ /costumes &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Nginx选择Location的顺序</strong></p>
+<ol>
+<li>精确匹配，使用<code>=</code>修饰的Loaction，如果其恰好匹配客户端请求的URI，则这个Location会被直接选择并结束搜索。</li>
+<li>如果没有精确匹配，则Nginx会寻找最长的前缀匹配。如果寻找到的匹配包含修饰符<code>^~</code>，则直接结束搜索并选择这个Location作为最终选择，否则，将这个Location加入备选列表中，在遍历所有可能的Loaction后，从列表中选择最长的前缀匹配。</li>
+<li>选择出最长的前缀匹配后，Nginx会继续进行正则表达式的Location匹配(包括大小写敏感和大小写不敏感的正则表达式匹配)。在这一步中，Nginx会选择第一个匹配的正则表达式的Location。</li>
+<li>如果在步骤3中找到了匹配的正则表达式，则使用其对应的Location来处理请求。如果没有找到匹配的正则表达式，则使用步骤2中的最长前缀匹配Location。</li>
+</ol>
+<p>和<code>server_name</code>稍有不同的是，默认情况下，正则表达式匹配的优先级比前缀匹配更高，你可以通过修饰符<code>^~</code>来提高前缀匹配的优先级。</p>
+<p><strong>Location之间的跳转条件</strong><br>在多数情况，一个Location选择以后，接下来的操作都会以来于Location内部的指令来工作，与Location外部几乎没有关系。不过还是有少数指令可以实现Location之间的跳转，我们称之为内部重定向(internal redirect)。</p>
+<ul>
+<li>index</li>
+<li>try_files</li>
+<li>rewrite</li>
+<li>error_page</li>
+</ul>
+<p><code>index</code>会始终触发一个内部重定向，特别是在我们使用修饰符为<code>=</code>的精确匹配时。一般情况下使用精确匹配可以加快Nginx匹配请求的速度，因为精确匹配一旦达成，则会直接终止搜索。但是，如果我们精确匹配的路径是一个目录，那么这个请求很可能会被内部重定向到其他的Location。</p>
+<p>在下面的例子中，客户端访问的URI为<code>/exact</code>，虽然这个请求和第一个Locatoin精确匹配，但是由于<code>index</code>的作用，请求最终会跳转到第二个Location处理。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">index index.html;</span><br><span class="line"></span><br><span class="line">location = /exact &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个种情况下，如果你真的需要让URI为<code>/exact</code>的请求匹配到第一个Location，可以通过设置一个非法的<code>index</code>值，同时将<code>autoindex</code>设置为<code>on</code>。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location = /exact &#123;</span><br><span class="line">    index nothing_will_match;</span><br><span class="line">    autoindex on;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location  / &#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是组织<code>index</code>触发内部重定向的一种方法，不过在大部分Nginx配置文件中并不常见。</p>
+<p><code>try_files</code>会依次检查文件和目录的是否存在，其最后一个参数可以是URI的形式，如果前面列举的文件或者目录都不存在，那么Nginx会触发一个内部重定向到这个URI。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">root</span> /var/www/main;</span><br><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>.html <span class="variable">$uri</span>/ /fallback/index.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> /fallback &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/another;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，假设请求的URI为<code>/balabala</code>，那么首先第一个Location会用于处理这个请求，Nginx会在目录<code>/var/www/main/</code>下依次检查<code>balabala</code>，<code>balabala.html</code>，<code>balabala/</code>是否存在，如果上面的检查都失败了，URI会变为<code>/fallback/index.html</code>，这会重新触发Location的选择。最终这个请求会交由第二个Location处理，Nginx会返回文件<code>/var/www/another/fallback/index.html</code>。</p>
+<p>参考上面的例子，我们在第一个Location加入了<code>rewrite</code>指令，我们可以发现，有时候请求会在执行<code>try_files</code>之前被直接发送到第二个Location。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">root</span> /var/www/main;</span><br><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">rewrite</span><span class="regexp"> ^/rewriteme/(.*)$</span> /<span class="variable">$1</span> <span class="literal">last</span>;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>.html <span class="variable">$uri</span>/ /fallback/index.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> /fallback &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www/another;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中，如果访问的URI是<code>/rewriteme/hello</code>，经过<code>rewrite</code>指令后URI变为<code>/hello</code>，仍然在第一个Location内，因此<code>try_files</code>会继续执行，如果三个文件都检查失败(就想我们之前讨论的那样)，那么请求会跳转到第二个Location。</p>
+<p>如果访问的URI是<code>/rewriteme/fallback/hello</code>，经过<code>rewrite</code>以后会变为<code>/fallback/hello</code>，因此这个请求会直接发送给第二个Location，跳过<code>try_files</code>。</p>
+<p>和<code>rewrite</code>功能类似的还有<code>return</code>，<code>return</code>通过指定状态码为<code>301</code>或者<code>307</code>和对应的URL，也可以实现重定向，不过的<code>return</code>会使客户端重新发送请求。</p>
+<p><code>error_page</code>用于指定返回的状态码对应的URI。当Location中还有<code>try_files</code>时，<code>error_page</code>就很可能不会被执行，因为<code>try_files</code>已经处理了整个的请求过程。</p>
+<p>我们来看下面一段配置。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">root</span> /var/www/main;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">error_page</span> <span class="number">404</span> /another/whoops.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> /another &#123;</span><br><span class="line">    <span class="attribute">root</span> /var/www;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了开头为<code>/another</code>的请求，所有的请求都会被第一个Location处理，如果客户端请求了一个不存在的文件，Nginx就会返回一个<code>404</code>的状态码，在这个情况下，URI会被内部重定向到<code>/another/whoops.html</code>，交由第二个Location处理。</p>
+<h1 id="其他域"><a href="#其他域" class="headerlink" title="其他域"></a>其他域</h1><p>除了上面介绍的，Nginx还有很多域，例如：</p>
+<ul>
+<li><code>upstream</code>：Nginx作为反向代理服务器，可以使用这个域作为负载均衡的控制配置。这也是一个很重要的Context，以后我会详细介绍。</li>
+<li><code>mail</code>：用于配置邮件服务器。</li>
+<li><code>if</code>：一般出现在<code>Location</code>域中，用于条件控制，大多数情况都可以用更直观的<code>rewrite</code>代替<code>if</code>，因此建议尽量少用<code>if</code>。</li>
+<li><code>limit_except</code>：用于增加对访问权限的控制。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag">#nginx</a>
+          
+            <a href="/tags/配置/" rel="tag">#配置</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/25/nginx-python/" rel="next" title="基于Nginx搭建Python WSGI应用">
+                <i class="fa fa-chevron-left"></i> 基于Nginx搭建Python WSGI应用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/05/29/nginx-config-struct/"
+     data-title="深入理解 Nginx 配置"
+     data-content=""
+     data-url="http://heaven1881.github.io/2016/05/29/nginx-config-struct/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/29/nginx-config-struct/"
+           data-title="深入理解 Nginx 配置" data-url="http://heaven1881.github.io/2016/05/29/nginx-config-struct/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Winton Luo" />
+          <p class="site-author-name" itemprop="name">Winton Luo</p>
+          <p class="site-description motion-element" itemprop="description">心若止水功自成</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Heaven1881" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:heaven1881@163.com" target="_blank" title="Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                  Mail
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要域-Context"><span class="nav-number">1.</span> <span class="nav-text">主要域(Context)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Main-域"><span class="nav-number">1.1.</span> <span class="nav-text">Main 域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-域"><span class="nav-number">1.2.</span> <span class="nav-text">Event 域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Http-域"><span class="nav-number">1.3.</span> <span class="nav-text">Http 域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Server-域"><span class="nav-number">1.4.</span> <span class="nav-text">Server 域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Location-域"><span class="nav-number">1.5.</span> <span class="nav-text">Location 域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他域"><span class="nav-number">2.</span> <span class="nav-text">其他域</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016/5/20 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Winton Luo</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"heaven1881"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
