@@ -58,18 +58,18 @@
 
 
 
-<meta name="description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑可以设置为自动与互联网的时间同步，也基本上是使用了NTP协议。">
+<meta name="description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NTP协议：时间同步和DDOS攻击">
 <meta property="og:url" content="http://heaven1881.github.io/2016/06/25/ntp-and-time-sync/index.html">
 <meta property="og:site_name" content="Winton的学习笔记">
-<meta property="og:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑可以设置为自动与互联网的时间同步，也基本上是使用了NTP协议。">
+<meta property="og:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
 <meta property="og:image" content="http://heaven1881.github.io/uploads/ntp.png">
 <meta property="og:image" content="http://heaven1881.github.io/uploads/ntp-stratum.png">
-<meta property="og:updated_time" content="2016-06-24T23:58:56.000Z">
+<meta property="og:updated_time" content="2016-07-06T23:41:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NTP协议：时间同步和DDOS攻击">
-<meta name="twitter:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑可以设置为自动与互联网的时间同步，也基本上是使用了NTP协议。">
+<meta name="twitter:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
 <meta name="twitter:image" content="http://heaven1881.github.io/uploads/ntp.png">
 
 
@@ -275,10 +275,10 @@
       
 
       
-        <p>NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑可以设置为自动与互联网的时间同步，也基本上是使用了NTP协议。</p>
+        <p>NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。</p>
 <a id="more"></a>
 <p>NTP最早由特拉华州大学(University of Delaware)的<a href="https://en.m.wikipedia.org/wiki/David_L._Mills" target="_blank" rel="external">David L. Mills</a>设计。设计NTP协议的主要目的是抵消网络时间同步过程中由于网络延时带来的影响。</p>
-<h1 id="主要原理"><a href="#主要原理" class="headerlink" title="主要原理"></a>主要原理</h1><p>NTP用于计算机网络之间的时间同步，为了方便说明原理，我们先介绍客户端和服务端的时间同步。在这里我们假设服务端的时间是准确的时间，客户端需要向服务端发起时间同步的请求，在完成时间同步之前，客户端的时间是不准确的。我们使用$t$代表服务端的时间，使用$t’$代表客户端的时间。那么服务端与客户端的时间差可以表示为：</p>
+<h1 id="主要原理"><a href="#主要原理" class="headerlink" title="主要原理"></a>主要原理</h1><p>NTP用于计算机网络多台设备之间的时间同步，为了方便说明原理，我们先介绍两台设备之间，即客户端和服务端的时间同步。在这里我们假设服务端的时间是准确的时间，客户端需要向服务端发起时间同步的请求，在完成时间同步之前，客户端的时间是不准确的。我们使用$t$代表服务端的时间，使用$t’$代表客户端的时间。那么服务端与客户端的时间差可以表示为：</p>
 <p>$$d=t-t’$$</p>
 <p>因此，我们只需要计算出$d$即可实现客户端与服务器端的时间同步。</p>
 <h2 id="相关流程"><a href="#相关流程" class="headerlink" title="相关流程"></a>相关流程</h2><p>NTP协议的主要涉及到以下4个时间戳：</p>
@@ -301,8 +301,8 @@
 <p>同理，设$T_{sc}$为服务端到客户端传输时间，有：</p>
 <p>$$t_3-t’_4=d-T_{sc}$$</p>
 <p>如果网络稳定，$T_{cs}$约等于$T_{sc}$，此时我们可以计算$d$的估计值：</p>
-<p>$$d^*=\frac{(d+T_{cs})+(d-T_{sc})}{2}=\frac{(t_2-t’_1)+(t_3-t’_4)}{2}$$</p>
-<p>上式就是客户端计算$d$的最终公式，可以发现$d$与服务器的处理时间$t_3-t_2$没有关系，如果$T_{cs}=T_{sc}$，则有$d^{*}=d$。目前NTP在广域网中的时间同步其误差通常能控制在50ms内，但是有时候误差也会到达500ms，这是因为每次通信是经过的路由路径可能不相同，造成$T_{cs}$和$T_{sc}$相差过大。</p>
+<p>$$d^*=d+\frac{T_{cs}-T_{sc}}{2}=\frac{(d+T_{cs})+(d-T_{sc})}{2}=\frac{(t_2-t’_1)+(t_3-t’_4)}{2}$$</p>
+<p>上式就是客户端计算$d$的最终公式，可以发现$d$与服务器的处理时间$t_3-t_2$没有关系，如果$T_{cs} \approx T_{sc}$，则有$d^{*} \approx d$。目前NTP在广域网中的时间同步其误差通常能控制在50ms内，但是有时候误差也会到达500ms，这是因为每次通信是经过的路由路径可能不相同，造成$T_{cs}$和$T_{sc}$相差过大。</p>
 <h1 id="时钟同步的层级结构"><a href="#时钟同步的层级结构" class="headerlink" title="时钟同步的层级结构"></a>时钟同步的层级结构</h1><p>在实际环境中，NTP协议涉及到很多设备的时间同步，这些设备以类似于树的形式相关联，并形成分层的结构。NTP协议将其称作阶层(Stratum)，阶层是一个正整数，最顶层的设备阶层为0，如果一个设备的与一个阶层为$n$的服务端进行了时间同步，那么这个设备的阶层就是$n+1$。因此阶层代表了这个设备与处于顶层的设备(原始时钟设备)的距离，同时阶层的引入也避免了循环时间同步的问题。</p>
 <p><img src="/uploads/ntp-stratum.png" alt=""></p>
 <p>在这里需要注意的是，虽然阶层代表了设备与原始时钟设备的同步距离，但是并不一定代表着阶层越低的设备时钟越精确，实际上经常会出现阶层高但是时间精度也更高的设备。下面是阶层0，1，2和3的简要介绍。</p>
@@ -316,10 +316,10 @@
 <li><p><strong>阶层3</strong><br>这一层的设备通过网络和阶层2进行时间同步，其使用的时间同步算法和阶层2相同，同时也作为服务端与阶层4同步。后面的阶层都使用类似的策略。</p>
 </li>
 </ul>
-<p>阶层的上限是15，阶层16表示这个设备的时钟未同步。NTP协议中使用Bellman-Ford算法来计算最短路径，用来寻找和阶层1最近的服务端。</p>
+<p>阶层的上限是15，阶层16表示这个设备的时钟未同步。NTP协议中使用<a href="https://en.m.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm" target="_blank" rel="external">Bellman-Ford算法</a>来计算最短路径，用来寻找和阶层1最近的服务端。</p>
 <h1 id="NTP带来的网络安全风险"><a href="#NTP带来的网络安全风险" class="headerlink" title="NTP带来的网络安全风险"></a>NTP带来的网络安全风险</h1><h2 id="DDOS反射攻击"><a href="#DDOS反射攻击" class="headerlink" title="DDOS反射攻击"></a>DDOS反射攻击</h2><p>NTP协议提供了一系列监控命令，其中最值得注意的是命令<code>monlist</code>(<code>MON_GETLIST</code>)。当一个NTP服务器接收到<code>monlist</code>命令，它会返回最近600条交互记录，也就是说，只要给NTP服务器发送约250 Bytes的数据，就可以让其返回好几KB的数据，一般情况下，这个命令可以使流量放大约200倍(这个数据取决于NTP服务器可以报告的最近活动的数量)。换句话说，1GB的网络流量，借助NTP服务器的这条命令放大以后可以产生200GB的流量。</p>
 <p>对于攻击者来说，只需要通过发送<code>MON_GETLIST</code>请求到多个NTP服务器，同时将IP地址伪装为攻击目标的IP，这样会导致NTP服务将处理的结果都发送到目标机器的<code>123</code>端口上。如果流量足够大，目标机器很快会因为系统资源枯竭而崩溃。</p>
-<p>这样的DDOS攻击也叫做反射攻击，和其相似的攻击还有借助DNS服务器的攻击，原理都是通过欺骗IP的方法让服务端对目标机器发起进攻。</p>
+<p>这样的DDOS攻击也叫做反射攻击，和其相似的攻击还有借助DNS协议及其服务器的攻击，原理都是通过欺骗IP的方法让服务端对目标机器发起进攻。</p>
 <h2 id="如何避免NTP产生的攻击"><a href="#如何避免NTP产生的攻击" class="headerlink" title="如何避免NTP产生的攻击"></a>如何避免NTP产生的攻击</h2><p><strong>NTP服务器</strong><br>如果你是NTP服务器的管理员，你需要做的就是防止自己的机器成为别人进行DDOS反射攻击的“帮凶”。</p>
 <p>对于Windows系统来说，因为其实现的NTP协议默认禁止<code>monlist</code>命令，所以不会面临这个问题。但是对于多数Unix/Linux的机器，则会面临这个问题，可行的方法就是将NTP服务器的版本升级到4.2.7p26以后。如果无法升级，也可以考虑禁用<code>monlist</code>命令。</p>
 <p><strong>被攻击的目标服务器</strong><br>NTP协议使用的端口是<code>123</code>，使用的协议是UDP协议，如果你发现你的的机器在这个端口上出现了UDP的流量激增，那么很可能目前机器正在遭受攻击。</p>
