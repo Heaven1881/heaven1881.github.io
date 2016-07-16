@@ -64,7 +64,7 @@
 <meta property="og:url" content="http://lfwen.site/2016/07/10/gen-hexo-sitemap/index.html">
 <meta property="og:site_name" content="Winton的学习笔记">
 <meta property="og:description" content="站点地图也叫网站地图，里面保存了这个网站希望需要搜索引擎抓取的链接，如果我们希望自己的博客可以被Google和百度等搜索引擎搜索到，那么我们最好可以为搜索引擎Spider提供站点地图，方便让我们的网站加入索引。">
-<meta property="og:updated_time" content="2016-07-10T11:55:16.000Z">
+<meta property="og:updated_time" content="2016-07-16T17:44:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="让Hexo自动生成站点地图(sitemap.xml)">
 <meta name="twitter:description" content="站点地图也叫网站地图，里面保存了这个网站希望需要搜索引擎抓取的链接，如果我们希望自己的博客可以被Google和百度等搜索引擎搜索到，那么我们最好可以为搜索引擎Spider提供站点地图，方便让我们的网站加入索引。">
@@ -293,15 +293,15 @@
       
         <p>站点地图也叫网站地图，里面保存了这个网站希望需要搜索引擎抓取的链接，如果我们希望自己的博客可以被Google和百度等搜索引擎搜索到，那么我们最好可以为搜索引擎Spider提供站点地图，方便让我们的网站加入索引。</p>
 <a id="more"></a>
-<p>站点地图的示例可以参考<a href="http://heaven1881.github.io/sitemap.xml" target="_blank" rel="external">http://heaven1881.github.io/sitemap.xml</a> ，为了保持站点地图始终是最新的，我们需要在每次发布新的文章以后及时更新对应的站点地图，但是每次都手动编辑站点地图是十分麻烦的，我们可以借助插件<code>hexo-generator-sitemap</code>来在每次部署博客时自动生成对应的站点地图。</p>
+<p>站点地图的示例可以参考<a href="http://lfwen.site/sitemap.xml">http://lfwen.site/sitemap.xml</a> ，为了保持站点地图始终是最新的，我们需要在每次发布新的文章以后及时更新对应的站点地图，但是每次都手动编辑站点地图是十分麻烦的，我们可以借助插件<code>hexo-generator-sitemap</code>来在每次部署博客时自动生成对应的站点地图。</p>
 <h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>在你的Hexo博客的根目录下执行以下命令来为你的Hexo安装<code>hexo-generator-sitemap</code>插件。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
 <p>使用如下命令清除当前的缓存，并重新生成并部署博客</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g <span class="_">-d</span></span><br></pre></td></tr></table></figure>
-<p>如果一切正常，你可以通过URL<code>http://heaven1881.github.io/sitemap.xml</code>访问到对应的站点地图(这里需要将域名换成你自己的域名)。</p>
+<p>如果一切正常，你可以通过URL<code>http://lfwen.site/sitemap.xml</code>访问到对应的站点地图(这里需要将域名换成你自己的域名)。</p>
 <h2 id="插件使用"><a href="#插件使用" class="headerlink" title="插件使用"></a>插件使用</h2><h3 id="设置站点地图的名称"><a href="#设置站点地图的名称" class="headerlink" title="设置站点地图的名称"></a>设置站点地图的名称</h3><p>一般来说站点地图使用的<code>sitemap.xml</code>作为其默认名字，你也可以自己配置使用的文件名。<br>在博客根目录的<code>_config.yml</code>文件下添加以下文本，你可以将<code>sitemap.xml</code>指定为任意你需要的文件名。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sitemap:</span><br><span class="line">    path: sitemap.xml</span><br></pre></td></tr></table></figure>
-<h3 id="自定义站点地图"><a href="#自定义站点地图" class="headerlink" title="自定义站点地图"></a>自定义站点地图</h3><p>插件自动生成的<code>sitemap.xml</code>会包括网页中的大部分页面，但是并不是我们所有的网站都希望加入站点地图，例如<a href="http://heaven1881.github.io/tags/" target="_blank" rel="external">标签页面</a>和<a href="http://heaven1881.github.io/categories/" target="_blank" rel="external">分类页面</a>，对于类似的页面，只需要在对应的md文件的前置描述区添加<code>sitemap: false</code>即可。</p>
+<h3 id="自定义站点地图"><a href="#自定义站点地图" class="headerlink" title="自定义站点地图"></a>自定义站点地图</h3><p>插件自动生成的<code>sitemap.xml</code>会包括网页中的大部分页面，但是并不是我们所有的网站都希望加入站点地图，例如<a href="http://lfwen.site/tags/">标签页面</a>和<a href="http://lfwen.site/categories/">分类页面</a>，对于类似的页面，只需要在对应的md文件的前置描述区添加<code>sitemap: false</code>即可。</p>
 
       
     </div>
