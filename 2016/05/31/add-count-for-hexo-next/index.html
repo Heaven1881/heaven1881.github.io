@@ -71,7 +71,7 @@
 <meta property="og:image" content="http://lfwen.site/uploads/hexo-counter/app-key-position.png">
 <meta property="og:image" content="http://lfwen.site/uploads/hexo-counter/set-host.png">
 <meta property="og:image" content="http://lfwen.site/uploads/hexo-counter/footer.png">
-<meta property="og:updated_time" content="2016-05-31T08:18:49.000Z">
+<meta property="og:updated_time" content="2016-08-29T12:23:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="给Hexo的Next主题增加统计访客次数的功能">
 <meta name="twitter:description" content="之前参考这篇博客给自己的博客增加了访客统计功能，不过最新版本的Next主题已经可以支持访客统计功能。">
@@ -318,10 +318,13 @@
 <h1 id="设置安全域名"><a href="#设置安全域名" class="headerlink" title="设置安全域名"></a>设置安全域名</h1><p>有时候我们的会在本地通过<code>locahost:4000</code>浏览并编辑我们的页面，在这种情况下，LeanClound会记录很多没有意义的浏览次数。为了让统计的浏览次数有意义，我们可以在<code>应用-&gt;设置-&gt;安全中心-&gt;Web安全域名</code>中设置自己博客的域名，只有该域名可以访问LeanCloud系统，因此只会记录在这个域名下的访客数据。</p>
 <p><img src="/uploads/hexo-counter/set-host.png" alt=""></p>
 <p>完成上面所有的设置后，重新部署你的博客，应该可以看到对应的效果。</p>
-<h1 id="在底部显示总访问量标签"><a href="#在底部显示总访问量标签" class="headerlink" title="在底部显示总访问量标签"></a>在底部显示总访问量标签</h1><p>最终效果如下</p>
+<h1 id="在底部显示总访问量标签"><a href="#在底部显示总访问量标签" class="headerlink" title="在底部显示总访问量标签"></a>在底部显示总访问量标签</h1><p>这一部分的效果如下，大家可以根据自己的需求决定取舍。</p>
 <p><img src="/uploads/hexo-counter/footer.png" alt=""></p>
 <p>打开<code>/theme/next/layout/_partials/footer.swig</code>，在底部添加如下代码</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">src</span>=<span class="string">"https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"busuanzi_container_site_pv"</span>&gt;</span></span><br><span class="line">    &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;nbsp;总访问量: <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"busuanzi_value_site_pv"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>引入的JS脚本来自@不蒜子，这个脚本通过上传访问网站时的域名来实现记录访问量的功能，在平时测试时，如果我们使用类似于<code>localhost</code>或者<code>127.0.0.1</code>的地址，会发现访问量变得很大，如果使用自己的域名则不会有这个问题。</p>
+</blockquote>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
 <p><a href="http://www.jeyzhang.com/hexo-next-add-post-views.html" target="_blank" rel="external">Hexo的NexT主题个性化：添加文章阅读量</a></p>
 </blockquote>
@@ -563,10 +566,6 @@
   </a>
 </div>
 
-<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<span id="busuanzi_container_site_pv">
-    &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;总访问量: <span id="busuanzi_value_site_pv"></span>
-</span>
 
         
 

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lfwen.site/2016/05/31/add-count-for-hexo-next/</loc>
+    
+    <lastmod>2016-08-29T12:23:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lfwen.site/2016/07/10/gen-hexo-sitemap/</loc>
     
     <lastmod>2016-07-16T17:44:11.000Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://lfwen.site/2016/06/25/ntp-and-time-sync/</loc>
     
     <lastmod>2016-07-06T23:41:37.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://lfwen.site/2016/05/31/add-count-for-hexo-next/</loc>
-    
-    <lastmod>2016-05-31T08:18:49.000Z</lastmod>
     
   </url>
   
