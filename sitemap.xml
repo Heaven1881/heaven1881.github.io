@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lfwen.site/2016/09/21/why-variables-cant-be-declared-in-switch-statement/</loc>
+    
+    <lastmod>2016-09-21T15:49:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lfwen.site/2016/05/31/add-count-for-hexo-next/</loc>
     
     <lastmod>2016-08-29T12:23:12.000Z</lastmod>

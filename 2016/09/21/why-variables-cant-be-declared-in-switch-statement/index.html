@@ -42,7 +42,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="ntp,时间同步,ddos," />
+  <meta name="keywords" content="c,c++,switch," />
 
 
 
@@ -58,19 +58,16 @@
 
 
 
-<meta name="description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
+<meta name="description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NTP协议：时间同步和DDOS攻击">
-<meta property="og:url" content="http://lfwen.site/2016/06/25/ntp-and-time-sync/index.html">
+<meta property="og:title" content="C/C++：为何编译器不允许在switch内声明变量">
+<meta property="og:url" content="http://lfwen.site/2016/09/21/why-variables-cant-be-declared-in-switch-statement/index.html">
 <meta property="og:site_name" content="Winton的学习笔记">
-<meta property="og:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
-<meta property="og:image" content="http://lfwen.site/uploads/ntp.png">
-<meta property="og:image" content="http://lfwen.site/uploads/ntp-stratum.png">
-<meta property="og:updated_time" content="2016-07-06T23:41:37.000Z">
+<meta property="og:description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
+<meta property="og:updated_time" content="2016-09-21T15:49:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NTP协议：时间同步和DDOS攻击">
-<meta name="twitter:description" content="NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。">
-<meta name="twitter:image" content="http://lfwen.site/uploads/ntp.png">
+<meta name="twitter:title" content="C/C++：为何编译器不允许在switch内声明变量">
+<meta name="twitter:description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
 
 
 
@@ -88,7 +85,7 @@
   };
 </script>
 
-  <title> NTP协议：时间同步和DDOS攻击 | Winton的学习笔记 </title>
+  <title> C/C++：为何编译器不允许在switch内声明变量 | Winton的学习笔记 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -218,7 +215,7 @@
             
             
               
-                NTP协议：时间同步和DDOS攻击
+                C/C++：为何编译器不允许在switch内声明变量
               
             
           </h1>
@@ -230,19 +227,38 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-25T07:58:56+08:00" content="2016-06-25">
-              2016-06-25
+            <time itemprop="dateCreated" datetime="2016-09-21T23:49:08+08:00" content="2016-09-21">
+              2016-09-21
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/25/ntp-and-time-sync/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/25/ntp-and-time-sync/" itemprop="commentsCount"></span>
+                <a href="/2016/09/21/why-variables-cant-be-declared-in-switch-statement/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/21/why-variables-cant-be-declared-in-switch-statement/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -252,7 +268,7 @@
 
           
           
-             <span id="/2016/06/25/ntp-and-time-sync/" class="leancloud_visitors" data-flag-title="NTP协议：时间同步和DDOS攻击">
+             <span id="/2016/09/21/why-variables-cant-be-declared-in-switch-statement/" class="leancloud_visitors" data-flag-title="C/C++：为何编译器不允许在switch内声明变量">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -275,61 +291,29 @@
       
 
       
-        <p>NTP(Network Time Protocol)协议是多台互联网设备进行时间同步时使用的协议，我们的手机和电脑的时间可以设置为自动与互联网的其他设备同步，也基本上是使用了NTP协议。</p>
+        <p>为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。</p>
 <a id="more"></a>
-<p>NTP最早由特拉华州大学(University of Delaware)的<a href="https://en.m.wikipedia.org/wiki/David_L._Mills" target="_blank" rel="external">David L. Mills</a>设计。设计NTP协议的主要目的是抵消网络时间同步过程中由于网络延时带来的影响。</p>
-<h1 id="主要原理"><a href="#主要原理" class="headerlink" title="主要原理"></a>主要原理</h1><p>NTP用于计算机网络多台设备之间的时间同步，为了方便说明原理，我们先介绍两台设备之间，即客户端和服务端的时间同步。在这里我们假设服务端的时间是准确的时间，客户端需要向服务端发起时间同步的请求，在完成时间同步之前，客户端的时间是不准确的。我们使用$t$代表服务端的时间，使用$t’$代表客户端的时间。那么服务端与客户端的时间差可以表示为：</p>
-<p>$$d=t-t’$$</p>
-<p>因此，我们只需要计算出$d$即可实现客户端与服务器端的时间同步。</p>
-<h2 id="相关流程"><a href="#相关流程" class="headerlink" title="相关流程"></a>相关流程</h2><p>NTP协议的主要涉及到以下4个时间戳：</p>
-<ul>
-<li>客户端发送请求时，客户端本地的时间戳$t’_1$</li>
-<li>服务端收到客户端请求时，服务端本地的时间戳$t_2$</li>
-<li>服务端回复客户端的请求时，服务端本地的时间戳$t_3$</li>
-<li>客户端收到服务端回复时，客户端本地的时间戳$t’_4$</li>
-</ul>
-<p><img src="/uploads/ntp.png" alt=""></p>
-<p> 我们可以用上图表示这些时间的关系，假设客户端与服务端的时间差为$d$，那么我们可以计算出：</p>
-<ul>
-<li>客户端发送请求时，服务端的本地时间$t_1=t’_1+d$</li>
-<li>客户端收到服务端回复时，服务端的本地时间$t_4=t’_4+d$</li>
-</ul>
-<p>设$T_{cs}$为客户端到服务端的传输时间，有：</p>
-<p>$$T_{cs}=t_2-t_1=t_2-(t’_1+d)$$</p>
-<p>整理得：</p>
-<p>$$t_2-t’_1=d+T_{cs}$$</p>
-<p>同理，设$T_{sc}$为服务端到客户端传输时间，有：</p>
-<p>$$t_3-t’_4=d-T_{sc}$$</p>
-<p>如果网络稳定，$T_{cs}$约等于$T_{sc}$，此时我们可以计算$d$的估计值：</p>
-<p>$$d^*=d+\frac{T_{cs}-T_{sc}}{2}=\frac{(d+T_{cs})+(d-T_{sc})}{2}=\frac{(t_2-t’_1)+(t_3-t’_4)}{2}$$</p>
-<p>上式就是客户端计算$d$的最终公式，可以发现$d$与服务器的处理时间$t_3-t_2$没有关系，如果$T_{cs} \approx T_{sc}$，则有$d^{*} \approx d$。目前NTP在广域网中的时间同步其误差通常能控制在50ms内，但是有时候误差也会到达500ms，这是因为每次通信是经过的路由路径可能不相同，造成$T_{cs}$和$T_{sc}$相差过大。</p>
-<h1 id="时钟同步的层级结构"><a href="#时钟同步的层级结构" class="headerlink" title="时钟同步的层级结构"></a>时钟同步的层级结构</h1><p>在实际环境中，NTP协议涉及到很多设备的时间同步，这些设备以类似于树的形式相关联，并形成分层的结构。NTP协议将其称作阶层(Stratum)，阶层是一个正整数，最顶层的设备阶层为0，如果一个设备的与一个阶层为$n$的服务端进行了时间同步，那么这个设备的阶层就是$n+1$。因此阶层代表了这个设备与处于顶层的设备(原始时钟设备)的距离，同时阶层的引入也避免了循环时间同步的问题。</p>
-<p><img src="/uploads/ntp-stratum.png" alt=""></p>
-<p>在这里需要注意的是，虽然阶层代表了设备与原始时钟设备的同步距离，但是并不一定代表着阶层越低的设备时钟越精确，实际上经常会出现阶层高但是时间精度也更高的设备。下面是阶层0，1，2和3的简要介绍。</p>
-<ul>
-<li><p><strong>阶层0</strong><br>这一层都是高精度的时钟设备，例如原子钟，GPS时钟以及无线电时钟。这些设备一般会每秒生成一个信号并发送给与它直接相连的计算机设备。阶层0的设备也可以叫做原始时钟设备。</p>
-</li>
-<li><p><strong>阶层1</strong><br>这一层的设备与原始时钟设备，一般这些设备每隔几毫秒都会和与其直接相连的原始时钟进行时间同步，除此之外，阶层1的设备也会相互之间进行时间的同步检查</p>
-</li>
-<li><p><strong>阶层2</strong><br>阶层2的设备通过网络与阶层1的设备进行同步，一般由阶层2的设备发起时间同步的请求。为了保证时间同步的稳定性，阶层2的设备之间也会相互进行时间同步检查。</p>
-</li>
-<li><p><strong>阶层3</strong><br>这一层的设备通过网络和阶层2进行时间同步，其使用的时间同步算法和阶层2相同，同时也作为服务端与阶层4同步。后面的阶层都使用类似的策略。</p>
-</li>
-</ul>
-<p>阶层的上限是15，阶层16表示这个设备的时钟未同步。NTP协议中使用<a href="https://en.m.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm" target="_blank" rel="external">Bellman-Ford算法</a>来计算最短路径，用来寻找和阶层1最近的服务端。</p>
-<h1 id="NTP带来的网络安全风险"><a href="#NTP带来的网络安全风险" class="headerlink" title="NTP带来的网络安全风险"></a>NTP带来的网络安全风险</h1><h2 id="DDOS反射攻击"><a href="#DDOS反射攻击" class="headerlink" title="DDOS反射攻击"></a>DDOS反射攻击</h2><p>NTP协议提供了一系列监控命令，其中最值得注意的是命令<code>monlist</code>(<code>MON_GETLIST</code>)。当一个NTP服务器接收到<code>monlist</code>命令，它会返回最近600条交互记录，也就是说，只要给NTP服务器发送约250 Bytes的数据，就可以让其返回好几KB的数据，一般情况下，这个命令可以使流量放大约200倍(这个数据取决于NTP服务器可以报告的最近活动的数量)。换句话说，1GB的网络流量，借助NTP服务器的这条命令放大以后可以产生200GB的流量。</p>
-<p>对于攻击者来说，只需要通过发送<code>MON_GETLIST</code>请求到多个NTP服务器，同时将IP地址伪装为攻击目标的IP，这样会导致NTP服务将处理的结果都发送到目标机器的<code>123</code>端口上。如果流量足够大，目标机器很快会因为系统资源枯竭而崩溃。</p>
-<p>这样的DDOS攻击也叫做反射攻击，和其相似的攻击还有借助DNS协议及其服务器的攻击，原理都是通过欺骗IP的方法让服务端对目标机器发起进攻。</p>
-<h2 id="如何避免NTP产生的攻击"><a href="#如何避免NTP产生的攻击" class="headerlink" title="如何避免NTP产生的攻击"></a>如何避免NTP产生的攻击</h2><p><strong>NTP服务器</strong><br>如果你是NTP服务器的管理员，你需要做的就是防止自己的机器成为别人进行DDOS反射攻击的“帮凶”。</p>
-<p>对于Windows系统来说，因为其实现的NTP协议默认禁止<code>monlist</code>命令，所以不会面临这个问题。但是对于多数Unix/Linux的机器，则会面临这个问题，可行的方法就是将NTP服务器的版本升级到4.2.7p26以后。如果无法升级，也可以考虑禁用<code>monlist</code>命令。</p>
-<p><strong>被攻击的目标服务器</strong><br>NTP协议使用的端口是<code>123</code>，使用的协议是UDP协议，如果你发现你的的机器在这个端口上出现了UDP的流量激增，那么很可能目前机器正在遭受攻击。</p>
-<ul>
-<li>你可以使用<a href="http://tools.ietf.org/html/bcp38" target="_blank" rel="external">这篇文章</a>提到的方法，在路由层面阻止使用虚假IP的网络包。</li>
-<li>如果不需要和互联网进行时间同步，可以考虑对外关闭<code>123</code>端口的UDP连接。</li>
-</ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><blockquote>
-<p><a href="https://en.m.wikipedia.org/wiki/Network_Time_Protocol" target="_blank" rel="external">Network Time Protocol - Wikipedia, the free encyclopedia</a><br><a href="http://www.acunetix.com/blog/articles/ntp-reflection-ddos-attacks/" target="_blank" rel="external">Preventing NTP Reflection DDOS Attacks Based on CVE-2013-5211</a></p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近在整理项目代码时遇到一段编译报错的代码，例子如下:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (val)  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">case</span> VAL:  </span><br><span class="line">  <span class="comment">// 在switch内部声明变量</span></span><br><span class="line">  <span class="keyword">int</span> newVal = <span class="number">42</span>;  </span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> ANOTHER_VAL:  </span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码在编译时会报以下错误(MSC)：</p>
+<blockquote>
+<p>initialization of ‘newVal’ is skipped by ‘case’ label</p>
 </blockquote>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>这个错误在一开始会让人觉得不能理解，从编译器报错的内容来解释，就是说编译器觉得<code>newVal</code>的初始化可能会被跳过。我们可以从两个方面来解释编译器这么设计的理由。</p>
+<h2 id="原因一：程序安全性"><a href="#原因一：程序安全性" class="headerlink" title="原因一：程序安全性"></a>原因一：程序安全性</h2><p>我们来看下面的例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (a)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;  <span class="comment">// 'b' 在这里被初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    b++;        <span class="comment">// 'b' 在这里被改变，但实际上其并没有初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们假设这段代码可以通过编译，则如果<code>a</code>的值等于<code>2</code>，这段代码的行为是未定义的。对于变量<code>b</code>来说，其作用域就在紧接着<code>switch</code>的花括号<code>{}</code>内，所以只要在这对花括号内，对变量<code>b</code>的调用都算是合法的。然而<code>case</code>标签的跳转功能很可能导致变量<code>b</code>在声明之前被调用。</p>
+<p>和<code>case</code>标签功能类似的语句还有<code>goto</code>，实际上，如果你在<code>goto</code>语句后声明变量，编译器会提示类似错误：</p>
+<blockquote>
+<p>initialization of ‘a’ is skipped by ‘goto xxxx’</p>
+</blockquote>
+<p>这也是考虑到作用域以及程序安全性的结果。</p>
+<p><strong>如果我们一定需要在<code>case</code>标签后声明变量该怎么办呢？</strong>其实我们只要告诉编译器：我们在<code>case</code>下声明的变量绝对不可能在声明之前被调用。通过花括号<code>{}</code>来实现对应功能，参考下面的例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (a)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 变量 'b' 的作用域只在case下的花括号内</span></span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;  </span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    <span class="comment">// 对'b'的调用是不允许的，因为在作用域内，并没有声明变量'b'</span></span><br><span class="line">    <span class="comment">// b++;        </span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码是可以通过编译器检查的，我们使用花括号告诉编译器变量<code>b</code>的作用范围仅仅在当前<code>case</code>标签下，这样就可以避免上面提到的安全性问题，编译器自然不会报错。</p>
+<h2 id="原因二：编译问题"><a href="#原因二：编译问题" class="headerlink" title="原因二：编译问题"></a>原因二：编译问题</h2><p>学习过<code>C/C++</code>的人多多少少都会知道程序实际上运行在栈(stack)上的，函数的调用都会涉及对栈的操作：压入(Push)和弹出(Pop)。而每次函数调用时机器都会压入一定数量的数据，同时在函数返回时弹出对应的数据。而具体压入和弹出的数据量是编译器在编译时决定的。假如编译器在函数中发现<code>int a;</code>的语句，那么它就知道函数需要压入<code>int</code>对应的数据大小。</p>
+<p>如果程序中出现一些跳转标签，例如<code>case</code>和<code>goto</code>，那么编译器就会遇到问题，因为编译器在编译阶段无法确定程序实际跳转的位置。如果在跳转语句后出现了变量的声明，编译器也无法确定这个变量是否真的会被创建。编译工作无法继续。</p>
+<p>类似的问题都可以通过花括号来解决，就像跟在<code>if</code>和<code>else</code>语句后面的花括号一样，虽然<code>if</code>和<code>else</code>也有跳转的意思，但是其后跟着的花括号表明这是一个独立的代码块，程序执行到这里时，会重新压入对应的数据，并在离开花括号时弹出对应的数据。因此在花括号内的声明是不受跳转语句影响的。</p>
 
       
     </div>
@@ -351,11 +335,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ntp/" rel="tag">#ntp</a>
+            <a href="/tags/c/" rel="tag">#c</a>
           
-            <a href="/tags/时间同步/" rel="tag">#时间同步</a>
+            <a href="/tags/c/" rel="tag">#c++</a>
           
-            <a href="/tags/ddos/" rel="tag">#ddos</a>
+            <a href="/tags/switch/" rel="tag">#switch</a>
           
         </div>
       
@@ -364,17 +348,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/31/add-count-for-hexo-next/" rel="next" title="给Hexo的Next主题增加统计访客次数的功能">
-                <i class="fa fa-chevron-left"></i> 给Hexo的Next主题增加统计访客次数的功能
+              <a href="/2016/07/10/gen-hexo-sitemap/" rel="next" title="让Hexo自动生成站点地图(sitemap.xml)">
+                <i class="fa fa-chevron-left"></i> 让Hexo自动生成站点地图(sitemap.xml)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/10/gen-hexo-sitemap/" rel="prev" title="让Hexo自动生成站点地图(sitemap.xml)">
-                让Hexo自动生成站点地图(sitemap.xml) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -389,10 +369,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/06/25/ntp-and-time-sync/"
-     data-title="NTP协议：时间同步和DDOS攻击"
+        <div class="ds-share flat" data-thread-key="2016/09/21/why-variables-cant-be-declared-in-switch-statement/"
+     data-title="C/C++：为何编译器不允许在switch内声明变量"
      data-content=""
-     data-url="http://lfwen.site/2016/06/25/ntp-and-time-sync/">
+     data-url="http://lfwen.site/2016/09/21/why-variables-cant-be-declared-in-switch-statement/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -419,8 +399,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/25/ntp-and-time-sync/"
-           data-title="NTP协议：时间同步和DDOS攻击" data-url="http://lfwen.site/2016/06/25/ntp-and-time-sync/">
+      <div class="ds-thread" data-thread-key="2016/09/21/why-variables-cant-be-declared-in-switch-statement/"
+           data-title="C/C++：为何编译器不允许在switch内声明变量" data-url="http://lfwen.site/2016/09/21/why-variables-cant-be-declared-in-switch-statement/">
       </div>
     
   </div>
@@ -531,7 +511,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要原理"><span class="nav-number">1.</span> <span class="nav-text">主要原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关流程"><span class="nav-number">1.1.</span> <span class="nav-text">相关流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#时钟同步的层级结构"><span class="nav-number">2.</span> <span class="nav-text">时钟同步的层级结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NTP带来的网络安全风险"><span class="nav-number">3.</span> <span class="nav-text">NTP带来的网络安全风险</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DDOS反射攻击"><span class="nav-number">3.1.</span> <span class="nav-text">DDOS反射攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免NTP产生的攻击"><span class="nav-number">3.2.</span> <span class="nav-text">如何避免NTP产生的攻击</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原因一：程序安全性"><span class="nav-number">2.1.</span> <span class="nav-text">原因一：程序安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因二：编译问题"><span class="nav-number">2.2.</span> <span class="nav-text">原因二：编译问题</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
