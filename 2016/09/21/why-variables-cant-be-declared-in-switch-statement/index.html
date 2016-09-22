@@ -58,16 +58,18 @@
 
 
 
-<meta name="description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
+<meta name="description" content="为什么编译器不允许在switch结构体内声明变量呢？我们可以从两个方面来解释原因。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C/C++：为何编译器不允许在switch内声明变量">
 <meta property="og:url" content="http://lfwen.site/2016/09/21/why-variables-cant-be-declared-in-switch-statement/index.html">
 <meta property="og:site_name" content="Winton的学习笔记">
-<meta property="og:description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
-<meta property="og:updated_time" content="2016-09-21T15:49:08.000Z">
+<meta property="og:description" content="为什么编译器不允许在switch结构体内声明变量呢？我们可以从两个方面来解释原因。">
+<meta property="og:image" content="http://lfwen.site/uploads/function-call-stack.png">
+<meta property="og:updated_time" content="2016-09-22T13:50:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C/C++：为何编译器不允许在switch内声明变量">
-<meta name="twitter:description" content="为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。">
+<meta name="twitter:description" content="为什么编译器不允许在switch结构体内声明变量呢？我们可以从两个方面来解释原因。">
+<meta name="twitter:image" content="http://lfwen.site/uploads/function-call-stack.png">
 
 
 
@@ -291,7 +293,7 @@
       
 
       
-        <p>为什么编译器不允许在switch结构体内声明变量？我们可以从两个方面来解释原因。</p>
+        <p>为什么编译器不允许在switch结构体内声明变量呢？我们可以从两个方面来解释原因。</p>
 <a id="more"></a>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近在整理项目代码时遇到一段编译报错的代码，例子如下:</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (val)  </span><br><span class="line">&#123;  </span><br><span class="line"><span class="keyword">case</span> VAL:  </span><br><span class="line">  <span class="comment">// 在switch内部声明变量</span></span><br><span class="line">  <span class="keyword">int</span> newVal = <span class="number">42</span>;  </span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> ANOTHER_VAL:  </span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -299,20 +301,21 @@
 <blockquote>
 <p>initialization of ‘newVal’ is skipped by ‘case’ label</p>
 </blockquote>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>这个错误在一开始会让人觉得不能理解，从编译器报错的内容来解释，就是说编译器觉得<code>newVal</code>的初始化可能会被跳过。我们可以从两个方面来解释编译器这么设计的理由。</p>
-<h2 id="原因一：程序安全性"><a href="#原因一：程序安全性" class="headerlink" title="原因一：程序安全性"></a>原因一：程序安全性</h2><p>我们来看下面的例子：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (a)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;  <span class="comment">// 'b' 在这里被初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    b++;        <span class="comment">// 'b' 在这里被改变，但实际上其并没有初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们假设这段代码可以通过编译，则如果<code>a</code>的值等于<code>2</code>，这段代码的行为是未定义的。对于变量<code>b</code>来说，其作用域就在紧接着<code>switch</code>的花括号<code>{}</code>内，所以只要在这对花括号内，对变量<code>b</code>的调用都算是合法的。然而<code>case</code>标签的跳转功能很可能导致变量<code>b</code>在声明之前被调用。</p>
-<p>和<code>case</code>标签功能类似的语句还有<code>goto</code>，实际上，如果你在<code>goto</code>语句后声明变量，编译器会提示类似错误：</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>这个错误在一开始会让人不能理解，而从编译器报错的内容来解释，就是说编译器觉得<code>newVal</code>的初始化可能会被跳过。我们可以从两个方面来解释编译器这么做得原因。</p>
+<h2 id="原因一：程序安全性"><a href="#原因一：程序安全性" class="headerlink" title="原因一：程序安全性"></a>原因一：程序安全性</h2><p>首先，我们来看下面的例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (a)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;  <span class="comment">// 'b' 在这里被初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    b++;        <span class="comment">// 'b' 在这里被改变，但实际上其可能没有初始化</span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们先假设编译器会忽略switch内声明变量的错误，那么在<code>a</code>的值等于<code>2</code>的情况下，这段代码的行为是未定义的。对于变量<code>b</code>来说，其作用域就在紧接着<code>switch</code>的花括号<code>{}</code>内，所以在花括号内对变量<code>b</code>的调用都算是合法的。然而<code>case</code>标签的跳转功能很可能导致变量<code>b</code>在声明之前被调用。</p>
+<p>和<code>case</code>类似的语句还有<code>goto</code>，实际上，如果你在<code>goto</code>语句后声明变量，编译器会提示类似错误：</p>
 <blockquote>
 <p>initialization of ‘a’ is skipped by ‘goto xxxx’</p>
 </blockquote>
-<p>这也是考虑到作用域以及程序安全性的结果。</p>
+<p>这也是出于对作用域以及程序安全性的考虑</p>
 <p><strong>如果我们一定需要在<code>case</code>标签后声明变量该怎么办呢？</strong>其实我们只要告诉编译器：我们在<code>case</code>下声明的变量绝对不可能在声明之前被调用。通过花括号<code>{}</code>来实现对应功能，参考下面的例子：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (a)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 变量 'b' 的作用域只在case下的花括号内</span></span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;  </span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    <span class="comment">// 对'b'的调用是不允许的，因为在作用域内，并没有声明变量'b'</span></span><br><span class="line">    <span class="comment">// b++;        </span></span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的代码是可以通过编译器检查的，我们使用花括号告诉编译器变量<code>b</code>的作用范围仅仅在当前<code>case</code>标签下，这样就可以避免上面提到的安全性问题，编译器自然不会报错。</p>
 <h2 id="原因二：编译问题"><a href="#原因二：编译问题" class="headerlink" title="原因二：编译问题"></a>原因二：编译问题</h2><p>学习过<code>C/C++</code>的人多多少少都会知道程序实际上运行在栈(stack)上的，函数的调用都会涉及对栈的操作：压入(Push)和弹出(Pop)。而每次函数调用时机器都会压入一定数量的数据，同时在函数返回时弹出对应的数据。而具体压入和弹出的数据量是编译器在编译时决定的。假如编译器在函数中发现<code>int a;</code>的语句，那么它就知道函数需要压入<code>int</code>对应的数据大小。</p>
-<p>如果程序中出现一些跳转标签，例如<code>case</code>和<code>goto</code>，那么编译器就会遇到问题，因为编译器在编译阶段无法确定程序实际跳转的位置。如果在跳转语句后出现了变量的声明，编译器也无法确定这个变量是否真的会被创建。编译工作无法继续。</p>
+<p><img src="/uploads/function-call-stack.png" alt=""></p>
+<p>如果程序中出现一些跳转标签，例如<code>case</code>和<code>goto</code>，那么编译器在编译阶段是无法确定程序的实际运行路径的。如果在跳转语句后出现了变量的声明，编译器无法确定这个变量是否真的会被创建。因此也就无法确定需要压栈的大小</p>
 <p>类似的问题都可以通过花括号来解决，就像跟在<code>if</code>和<code>else</code>语句后面的花括号一样，虽然<code>if</code>和<code>else</code>也有跳转的意思，但是其后跟着的花括号表明这是一个独立的代码块，程序执行到这里时，会重新压入对应的数据，并在离开花括号时弹出对应的数据。因此在花括号内的声明是不受跳转语句影响的。</p>
 
       
